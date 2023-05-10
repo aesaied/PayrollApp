@@ -1,0 +1,96 @@
+﻿@using PayrollApp.Consts;
+@model IEnumerable<PayrollApp.Models.DepartmentListInfo>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+@{
+    bool isAdmin = User.IsInRole(SystemRoles.Admins);
+}
+
+<h1>Index</h1>
+
+
+@if (TempData.ContainsKey("Msg"))
+{
+    <div class="alert alert-success">
+        @TempData["Msg"]
+
+       
+    </div>
+
+   
+}
+
+<fieldset>
+    <legend>Find by name</legend>
+
+    <form asp-action="Index" method="get">
+
+        <input name="keyword" value="@ViewBag.Keyword" />
+
+        <input type="submit"  asp-route-type="search" value="Search" />
+         
+        <a asp-action="Index" class="btn  btn-danger"   >reset</a>
+    </form>
+</fieldset>
+
+
+
+
+@if (isAdmin)
+{
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EmployeeCount)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EmployeeCount)
+                </td>
+            <td>
+
+                    @if (isAdmin) {
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                    <text> | </text>
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> 
+                        @if (item.EmployeeCount == 0)
+                        {
+                            <text>
+                                |
+                            </text>
+                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        }
+
+                        else
+                        {
+                            <a href="#">Delete</a>
+                        }
+
+                    }
+
+                
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
