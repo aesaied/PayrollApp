@@ -47,6 +47,8 @@ builder.Services.AddAuthentication(x => {
 
 });
 
+
+builder.Services.AddCors();
 builder.Services.AddAuthorization();
 builder.Services.AddApiVersioning(o =>
 {
@@ -177,7 +179,13 @@ builder.Services.AddTransient<IEmailSender, EmailSender>();
 
 var app = builder.Build();
 
-
+app.UseCors(builder =>
+{
+    builder
+    .AllowAnyOrigin()
+    .AllowAnyMethod()
+    .AllowAnyHeader();
+});
 
 
 // Configure the HTTP request pipeline.
